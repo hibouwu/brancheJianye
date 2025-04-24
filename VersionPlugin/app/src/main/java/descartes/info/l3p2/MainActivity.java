@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         String pluginPath = getFilesDir().getAbsolutePath() + "/plugins/plugin-debug.zip";
         bundle.putString("plugin_path_from_host",pluginPath);
         bundle.putString("part_key","sample-plugin");
-        bundle.putString("activity_class_name","descartes.info.l3p2.eyetrek.reconnaissanceArbres.activity.MainActivity" );
+        bundle.putString("activity_class_name","descartes.info.l3p2.eyetrek.reconnaissanceArbres.activity.Activity" );
         //bundle.putString("part_key","reconnaisseArbre");
 
         //transsform for Plugin

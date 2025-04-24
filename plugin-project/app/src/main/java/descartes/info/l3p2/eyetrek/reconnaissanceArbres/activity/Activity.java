@@ -1,16 +1,12 @@
 package descartes.info.l3p2.eyetrek.reconnaissanceArbres.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import descartes.info.l3p2.eyetrek.reconnaissanceArbres.R;
-import descartes.info.l3p2.eyetrek.modularite.fragments.FragmentExitModule;
 import descartes.info.l3p2.eyetrek.reconnaissanceArbres.fragments.FragmentEspecesProches;
 
 /**
@@ -22,7 +18,7 @@ import descartes.info.l3p2.eyetrek.reconnaissanceArbres.fragments.FragmentEspece
  * Suppression de 'transaction.add(R.id.settings, new FragmentExitModule());'
  * dans le but de transformer le module dynamique en application indépendante.
  */
-public class MainActivity extends AppCompatActivity {
+public class Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

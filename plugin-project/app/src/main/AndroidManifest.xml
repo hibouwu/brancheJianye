@@ -8,7 +8,7 @@
             android:value="sample-plugin" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
