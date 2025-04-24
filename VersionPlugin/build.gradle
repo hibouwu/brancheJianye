@@ -1,0 +1,31 @@
+buildscript {
+    ext.shadow_version = '2.2.1'
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/Tencent/Shadow")
+            credentials {
+                username = "hibouwu"
+                password = "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"
+            }
+        }
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/Tencent/Shadow")
+            credentials {
+                username = "hibouwu"
+                password = "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"
+            }
+        }
+        google()
+        mavenCentral()
+    }
+}

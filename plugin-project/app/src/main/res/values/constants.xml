@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Fichier de constantes pour l'application EyeTrek
+ * 
+ * Ce fichier contient toutes les valeurs constantes utilisées dans l'application,
+ * notamment dans les classes UpdateListActivity et AppUpdate.
+ * L'utilisation de ce fichier de ressources permet de centraliser les valeurs constantes
+ * et de faciliter leur modification sans avoir à modifier le code source.
+ * 
+ * @author Shi Jianye - 20/03/2025
+ * - Centralisation des constantes de l'application
+ * - Définition des délais, URLs et codes de requête
+ * - Amélioration de la maintenabilité du code
+ */
+-->
+<resources>
+    <!-- 
+        Constantes de temps pour les opérations de l'application
+        Utilisées pour définir les délais d'attente et les intervalles
+        @author Shi Jianye
+    -->
+    <integer name="install_complete_delay">3000</integer><!-- Délai après l'installation (en ms) -->
+    <integer name="connection_timeout">10000</integer><!-- Délai d'expiration de connexion (en ms) -->
+    <integer name="read_timeout">10000</integer><!-- Délai d'expiration de lecture (en ms) -->
+    
+    <!-- 
+        Codes de requête pour les permissions
+        @author Shi Jianye
+    -->
+    <integer name="permission_request_code">1001</integer>
+    
+    <!-- 
+        URLs pour les mises à jour et téléchargements
+        Ces URLs peuvent être modifiées en cas de changement de serveur
+        sans avoir à recompiler l'application
+        @author Shi Jianye
+    -->
+    <string name="apk_download_url">https://github.com/hibouwu/25-L3-Projet-APP-randonnee/releases/download/v1.0/app-release.apk</string>
+    <string name="update_info_url">https://github.com/hibouwu/25-L3-Projet-APP-randonnee/releases/download/v1.0/Update.json</string>
+    <string name="update_info_url1">"https://raw.githubusercontent.com/hibouwu/25-L3-Projet-APP-randonnee/main/modules.json"</string>
+    
+    <!-- 
+        Noms de fichiers utilisés dans l'application
+        @author Shi Jianye
+    -->
+    <string name="apk_filename">EyeTrek.apk</string>
+    
+    <!-- 
+        Constantes pour les préférences de l'application
+        Utilisées pour la persistance des données de configuration
+        @author Shi Jianye
+    -->
+    <string name="pref_file">app_prefs</string>
+</resources> 

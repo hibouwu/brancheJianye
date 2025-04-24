@@ -1,0 +1,124 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.tencent.shadow.plugin'
+
+
+android {
+    namespace "descartes.info.l3p2.eyetrek.reconnaissanceArbres"
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "descartes.info.l3p2"
+        minSdkVersion 28
+        targetSdkVersion 30
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled false
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    productFlavors {
+        plugin {
+            applicationId "descartes.info.l3p2"
+        }
+    }
+
+    aaptOptions {
+        cruncherEnabled = false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.fragment:fragment:1.3.2'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.2'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    
+    // 降级 AndroidX 核心库
+    implementation 'androidx.core:core:1.6.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    
+    // 降级生命周期相关库
+    implementation 'androidx.activity:activity:1.3.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-core:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
+    
+    // emoji2 相关库可以移除，除非你的应用特别需要
+    // implementation 'androidx.emoji2:emoji2:1.0.0'
+    // implementation 'androidx.emoji2:emoji2-views-helper:1.0.0'
+    
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Mise à jour des dépendances de test pour éviter les erreurs de fusion du manifeste avec targetSdkVersion 31 ou supérieur (android:exported requis).
+    androidTestImplementation 'androidx.test:core:1.4.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test:rules:1.4.0'
+
+    pluginCompileOnly "com.tencent.shadow.core:runtime:2.2.1"
+}
+
+shadow {
+    packagePlugin {
+        pluginTypes {
+            debug {
+                loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
+                runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
+                pluginApks {
+                    pluginApk1 {
+                        businessName = 'sample-plugin'
+                        partKey = 'sample-plugin'
+                        buildTask = 'assemblePluginDebug'
+                        apkName = 'app-plugin-debug.apk'
+                        apkPath = 'app/build/outputs/apk/plugin/debug/app-plugin-debug.apk'
+                    }
+                }
+            }
+
+            release {
+                loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
+                runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
+                pluginApks {
+                    pluginApk1 {
+                        businessName = 'demo'
+                        partKey = 'sample-plugin'
+                        buildTask = 'assemblePluginRelease'
+                        apkName = 'app-plugin-release.apk'
+                        apkPath = 'app/build/outputs/apk/plugin/release/app-plugin-release.apk'
+                    }
+                }
+            }
+        }
+
+        loaderApkProjectPath = 'sample-loader'
+        runtimeApkProjectPath = 'sample-runtime'
+        version = 4
+        compactVersion = [1, 2, 3]
+        uuidNickName = "1.1.5"
+    }
+}

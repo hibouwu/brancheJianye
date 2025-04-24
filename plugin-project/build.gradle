@@ -1,0 +1,70 @@
+buildscript {
+    ext.shadow_version = '2.2.1'
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://maven.aliyun.com/repository/google' }
+        if (!System.getenv().containsKey("DISABLE_TENCENT_MAVEN_MIRROR")) {
+            maven { url = 'https://mirrors.tencent.com/nexus/repository/maven-public/' }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/tencent/shadow"
+            credentials {
+                username = "hibouwu"
+                password = "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"
+            }
+        }
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.tencent.shadow.core:gradle-plugin:2.2.1'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31'
+        classpath 'com.googlecode.json-simple:json-simple:1.1.1'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.android.tools:sdk-common:30.0.0'
+            force 'com.android.tools.build:builder:7.0.3'
+            force 'com.android.tools.build:builder-model:7.0.3'
+        }
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://maven.aliyun.com/repository/google' }
+        if (!System.getenv().containsKey("DISABLE_TENCENT_MAVEN_MIRROR")) {
+            maven { url = 'https://mirrors.tencent.com/nexus/repository/maven-public/' }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/tencent/shadow"
+            //一个只读账号兼容Github Packages暂时不支持匿名下载
+            //https://github.community/t/download-from-github-package-registry-without-authentication/14407
+            credentials {
+                username = "hibouwu"
+                password = "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"
+            }
+        }
+        mavenLocal()
+    }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.android.tools:sdk-common:30.0.0'
+            force 'com.android.tools.build:builder:7.0.3'
+            force 'com.android.tools.build:builder-model:7.0.3'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

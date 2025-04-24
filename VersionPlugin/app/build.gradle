@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'descartes.info.l3p2'
+    compileSdkVersion 33
+    
+    defaultConfig {
+        applicationId "descartes.info.l3p2"
+        minSdkVersion 28
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/Tencent/Shadow")
+        credentials {
+            username = "hibouwu"
+            password = "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"
+        }
+    }
+    google()
+    mavenCentral()
+}
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'com.tencent.shadow.dynamic:host:2.2.1'
+}
