@@ -32,7 +32,6 @@ public class MyApplication extends Application {
         if (isProcess(this, ":plugin")) {
             DynamicRuntime.recoveryRuntime(this);
         } else {
-            //PluginManage
             FixedPathPmUpdater fixedPathPmUpdater = new FixedPathPmUpdater(new File(PlUGIN_MANAGER_APK_FILE_PATH));
 
             boolean needWaitingUpdate = fixedPathPmUpdater.wasUpdating()

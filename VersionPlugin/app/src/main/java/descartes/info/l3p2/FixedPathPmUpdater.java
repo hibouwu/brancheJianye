@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.concurrent.Future;
 
 public class FixedPathPmUpdater implements PluginManagerUpdater {
-    private File apk;
+    private final File apk;
     public FixedPathPmUpdater(File apk){this.apk = apk;}
     @Override
     public boolean wasUpdating() {

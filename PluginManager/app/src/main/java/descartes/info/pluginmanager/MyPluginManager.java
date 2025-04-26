@@ -42,7 +42,6 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
     
     public MyPluginManager(Context context) {
         super(context);
-        // this.hostPackageName = "descartes.info.l3p2";  // 保存宿主包名
         Log.d(TAG, "PluginManager---------------->constructor");
     }
 
@@ -60,14 +59,10 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
 
     @Override
     public void enter(Context context, long fromId, Bundle bundle, EnterCallback callback) {
-        Log.d(TAG, "PluginManager---------------->enter fromId:" + fromId);
+        Log.d(TAG, "PluginManager---------------->enter");
         final String pluginZipPath = bundle.getString("plugin_path_from_host");
         final String partKey = bundle.getString("part_key");
         final String className = bundle.getString("activity_class_name");
-        
-        Log.d(TAG, "PluginManager---------------->pluginZipPath:" + pluginZipPath + 
-                    " partKey:" + partKey + 
-                    " className:" + className);
                     
         if(className == null){
             Log.e(TAG, "PluginManager---------------->className is null");
@@ -76,7 +71,7 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
 
         File pluginFile = new File(pluginZipPath);
         if (!pluginFile.exists()) {
-            Log.e(TAG, "PluginManager---------------->plugin file not found: " + pluginZipPath);
+            Log.e(TAG, "PluginManager---------------->plugin file not found");
             if (callback != null) {
                 callback.onCloseLoadingView();
             }
@@ -85,7 +80,6 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
         
         final Bundle extras = bundle.getBundle("extra_to_plugin_bundle");
         if(callback != null){
-            Log.d(TAG, "PluginManager---------------->show loading view");
             callback.onShowLoadingView(null);
         }
         
@@ -93,20 +87,13 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
             @Override
             public void run() {
                 try {
-                    Log.d(TAG, "PluginManager---------------->start install plugin:" + pluginZipPath);
+                    Log.d(TAG, "PluginManager---------------->start install plugin");
                     InstalledPlugin installedPlugin = installedPlugin(pluginZipPath,null,true);
-                    Log.d(TAG, "PluginManager---------------->install success UUID:" + installedPlugin.UUID);
                     
-                    Log.d(TAG, "PluginManager---------------->Host Package Name: " + context.getPackageName());
-                    Log.d(TAG, "PluginManager---------------->Plugin Activity Class Name: " + className);
-
                     Intent pluginIntent = new Intent();
-                    Log.d(TAG, "PluginManager---------------->create intent className:" + className);
                     pluginIntent.setClassName(context.getPackageName(), className);
-                    Log.d(TAG, "PluginManager---------------->Final Intent Component: " + pluginIntent.getComponent().flattenToString());
                     
                     if (extras != null){
-                        Log.d(TAG, "PluginManager---------------->add extras to intent");
                         pluginIntent.replaceExtras(extras);
                     }
                     
@@ -123,18 +110,17 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
     }
 
     public void startPluginActivity(Context context, InstalledPlugin installedPlugin, String partKey, Intent pluginIntent) throws RemoteException, FailedException, TimeoutException {
-        Log.d(TAG, "PluginManager---------------->startPluginActivity partKey:" + partKey);
+        Log.d(TAG, "PluginManager---------------->startPluginActivity");
         Intent intent = convertActivityIntent(installedPlugin, partKey, pluginIntent);
         if(!(context instanceof Activity)){
-            Log.d(TAG, "PluginManager---------------->set NEW_TASK flag");
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        Log.d(TAG, "PluginManager---------------->start activity");
         context.startActivity(intent);
     }
 
     public Intent convertActivityIntent(InstalledPlugin installedPlugin, String partKey, Intent pluginIntent) throws RemoteException, FailedException, TimeoutException {
-        Log.d(TAG, "PluginManager---------------->convertActivityIntent for partKey:" + partKey);
+        Log.d(TAG, "PluginManager---------------->convertActivityIntent");
+        
         loadPlugin(installedPlugin.UUID, partKey);
         
         if (pluginIntent.getComponent() == null) {
@@ -142,43 +128,53 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
             throw new IllegalArgumentException("Intent component cannot be null");
         }
         
-        Log.d(TAG, "PluginManager---------------->before convert, intent component:" + pluginIntent.getComponent().flattenToString());
-        Intent convertedIntent = mPluginLoader.convertActivityIntent(pluginIntent);
-        Log.d(TAG, "PluginManager---------------->after convert, intent component:" + 
-              (convertedIntent.getComponent() != null ? convertedIntent.getComponent().flattenToString() : "null"));
-        
-        return convertedIntent;
+        try {
+            Intent convertedIntent = mPluginLoader.convertActivityIntent(pluginIntent);
+            
+            if (convertedIntent.getComponent() == null) {
+                Log.e(TAG, "PluginManager---------------->Converted Intent has NULL component!");
+            }
+            
+            return convertedIntent;
+        } catch (Exception e) {
+            Log.e(TAG, "PluginManager---------------->Error converting Activity Intent: " + e.getMessage(), e);
+            throw e;
+        }
     }
 
     protected void loadPlugin(String uuid, String partKey) throws RemoteException, TimeoutException, FailedException {
-        Log.d(TAG, "PluginManager---------------->loadPlugin UUID:" + uuid + " partKey:" + partKey);
-        loadPluginLoaderAndRuntime(uuid);
-        Map map = mPluginLoader.getLoadedPlugin();
-        Log.d(TAG, "PluginManager---------------->before load, loaded plugins:" + map.toString());
+        Log.d(TAG, "PluginManager---------------->loadPlugin");
         
-        if (!map.containsKey(partKey)) {
-            Log.d(TAG, "PluginManager---------------->loading plugin partKey:" + partKey);
-            mPluginLoader.loadPlugin(partKey);
-            // 重新获取加载状态
-            map = mPluginLoader.getLoadedPlugin();
-            Log.d(TAG, "PluginManager---------------->after load, loaded plugins:" + map.toString());
-        }
-        
-        Boolean isCall = (Boolean) map.get(partKey);
-        Log.d(TAG, "PluginManager---------------->plugin loaded status for " + partKey + ": " + isCall);
-        
-        if (isCall == null || !isCall) {
-            Log.d(TAG, "PluginManager---------------->calling Application.onCreate for partKey:" + partKey);
-            mPluginLoader.callApplicationOnCreate(partKey);
-            // 再次确认状态
-            map = mPluginLoader.getLoadedPlugin();
-            isCall = (Boolean) map.get(partKey);
-            Log.d(TAG, "PluginManager---------------->after onCreate, plugin status:" + isCall);
+        try {
+            loadPluginLoaderAndRuntime(uuid);
+            
+            Map map = mPluginLoader.getLoadedPlugin();
+            
+            if (!map.containsKey(partKey)) {
+                Log.d(TAG, "PluginManager---------------->loading plugin");
+                mPluginLoader.loadPlugin(partKey);
+                
+                try {
+                    // 检查插件组件
+                } catch (Exception e) {
+                    Log.e(TAG, "PluginManager---------------->Error getting plugin info: " + e.getMessage());
+                }
+            }
+            
+            Boolean isCall = (Boolean) map.get(partKey);
+            
+            if (isCall == null || !isCall) {
+                Log.d(TAG, "PluginManager---------------->calling Application.onCreate");
+                mPluginLoader.callApplicationOnCreate(partKey);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "PluginManager---------------->Error in loadPlugin: " + e.getMessage(), e);
+            throw e;
         }
     }
 
     private void loadPluginLoaderAndRuntime(String uuid) throws RemoteException, TimeoutException, FailedException {
-        Log.d(TAG, "PluginManager---------------->loadPluginLoaderAndRuntime UUID:" + uuid);
+        Log.d(TAG, "PluginManager---------------->loadPluginLoaderAndRuntime");
         if (mPpsController == null) {
             Log.d(TAG, "PluginManager---------------->bind service");
             bindPluginProcessService(getPluginProcessServiceName());
@@ -189,16 +185,15 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
             throw new IllegalStateException("mPpsController is still null after service connected");
         }
         
-        Log.d(TAG, "PluginManager---------------->load runtime and loader");
+        Log.d(TAG, "PluginManager---------------->load runtime");
         loadRunTime(uuid);
-        Log.d(TAG, "PluginManager---------------->runtime loaded successfully");
         
+        Log.d(TAG, "PluginManager---------------->load plugin loader");
         loadPluginLoader(uuid);
         
         if (mPluginLoader == null) {
             throw new IllegalStateException("mPluginLoader is null after loadPluginLoader");
         }
-        Log.d(TAG, "PluginManager---------------->plugin loader loaded successfully");
     }
 
     /**
@@ -206,30 +201,26 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
      * @return Class MainPluginProcessService in host
      */
     private String getPluginProcessServiceName() {
-        String serviceName = "descartes.info.l3p2.service.MainPluginProcessService";
-        Log.d(TAG, "PluginManager---------------->service name:" + serviceName);
-        return serviceName;
+        return "descartes.info.l3p2.service.MainPluginProcessService";
     }
 
 
     public InstalledPlugin installedPlugin(String zip, String hash, Boolean odex) throws IOException{
-        Log.d(TAG, "PluginManager---------------->installedPlugin zip:" + zip);
+        Log.d(TAG, "PluginManager---------------->installedPlugin");
         final PluginConfig pluginConfig;
         try {
             pluginConfig = installPluginFromZip(new File(zip),hash);
-            Log.d(TAG, "PluginManager---------------->config loaded UUID:" + pluginConfig.UUID);
         } catch (JSONException e) {
             Log.e(TAG, "PluginManager---------------->config error:" + e.getMessage(), e);
             throw new RuntimeException(e);
         }
         final String uuid = pluginConfig.UUID;
-        Log.d("ShiTest", "----------------> uuid"+uuid);
         List<Future> futures = new LinkedList<>();
         if(pluginConfig.runTime != null && pluginConfig.pluginLoader != null){
             Future odexRunTime = mFixedPool.submit(new Callable() {
                 @Override
                 public Object call() throws Exception{
-                    Log.d(TAG, "PluginManager---------------->process runtime UUID:" + uuid);
+                    Log.d(TAG, "PluginManager---------------->process runtime");
                     oDexPluginLoaderOrRunTime(uuid,InstalledType.TYPE_PLUGIN_RUNTIME,pluginConfig.runTime.file);
                     return null;
                 }
@@ -238,7 +229,7 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
             Future odexLoader = mFixedPool.submit(new Callable() {
                 @Override
                 public Object call() throws Exception{
-                    Log.d(TAG, "PluginManager---------------->process loader UUID:" + uuid);
+                    Log.d(TAG, "PluginManager---------------->process loader");
                     oDexPluginLoaderOrRunTime(uuid,InstalledType.TYPE_PLUGIN_LOADER,pluginConfig.pluginLoader.file);
                     return null;
                 }
@@ -246,14 +237,12 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
             futures.add(odexLoader);
         }
         for(Map.Entry<String, PluginConfig.PluginFileInfo> plugin : pluginConfig.plugins.entrySet()) {
-            //Path + test-dunamic-loader-debug.apk
             final String partKey = plugin.getKey();
             final File apkFile = plugin.getValue().file;
-            Log.d(TAG, "PluginManager---------------->process plugin part:" + partKey + " file:" + apkFile.getAbsolutePath());
             Future extractSo = mFixedPool.submit(new Callable() {
                 @Override
                 public Object call() throws Exception{
-                    Log.d(TAG, "PluginManager---------------->extract .so part:" + partKey);
+                    Log.d(TAG, "PluginManager---------------->extract .so");
                     extractSo(uuid,partKey,apkFile);
                     return null;
                 }
@@ -263,7 +252,7 @@ public class MyPluginManager extends PluginManagerThatUseDynamicLoader {
             Future odexPlugin = mFixedPool.submit(new Callable() {
                 @Override
                 public Object call() throws Exception{
-                    Log.d(TAG, "PluginManager---------------->process .dex part:" + partKey);
+                    Log.d(TAG, "PluginManager---------------->process .dex");
                     oDexPlugin(uuid,partKey,apkFile);
                     return null;
                 }
