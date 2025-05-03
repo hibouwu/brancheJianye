@@ -36,8 +36,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/Tencent/Shadow")
         credentials {
-            username = "hibouwu"
-            password = "yourpwd"
+            username = project.findProperty('gpr.user') ?: System.getenv('GITHUB_USERNAME') ?: "用户名"
+            password = project.findProperty('gpr.key') ?: System.getenv('GITHUB_TOKEN') ?: "token"
         }
     }
     google()
