@@ -1,0 +1,3 @@
+rootProject.name = "VersionPlugin"
+include ':app'
+include ':sample-host-lib'

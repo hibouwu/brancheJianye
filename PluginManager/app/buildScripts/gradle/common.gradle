@@ -1,0 +1,24 @@
+/**
+ * 这是一个为Shadow SDK构建系统提供的公共配置文件
+ * 它被coding模块引用，但在当前项目中实际内容可以是最小化的
+ */
+
+// 设置所有项目的默认仓库
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+    
+    // 为所有项目设置Android SDK版本属性
+    ext {
+        COMPILE_SDK_VERSION = 33
+        MIN_SDK_VERSION = 28
+        TARGET_SDK_VERSION = 33
+        VERSION_CODE = 1
+        VERSION_NAME = "1.0"
+    }
+}
+
+// 如果需要添加其他公共配置，可以在这里扩展 

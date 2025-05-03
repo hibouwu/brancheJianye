@@ -1,0 +1,2 @@
+include ':app', ':plugin',':plugin1',':plugin2',':plugin3', ':loader', ':runtime', ':plugin_manager'
+rootProject.name = 'testShadow'

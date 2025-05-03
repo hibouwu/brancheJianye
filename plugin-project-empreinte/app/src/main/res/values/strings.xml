@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Reconnaissance Empreintes</string>
+    <string name="title_reconnaissanceEmpreintes" translatable="false">reconnaissanceEmpreintes</string>
+
+    <string name="background_dl_dialog_ok_button">OK</string>
+    <string name="aucune_description">Aucune description n\'est disponible pour le moment.</string>
+    <string name="bouton_wikipedia">Aller sur Wikipedia</string>
+</resources>

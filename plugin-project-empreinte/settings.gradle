@@ -1,0 +1,4 @@
+include ':app'
+include ':sample-runtime'
+include ':sample-loader'
+rootProject.name = "plugin-project"

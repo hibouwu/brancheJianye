@@ -1,0 +1,56 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://repo.rdc.aliyun.com/repository/42850-release-OVOGxi"
+            credentials {
+                username "T73WKf"
+                password "yI25gfMOnr"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.51"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+ext {
+    compileSdkVersion = 28
+    compileSdkVersion = 28
+    targetSdkVersion = 16
+}
+
+allprojects {
+    ext {
+        compileSdkVersion = 28
+        compileSdkVersion = 28
+        targetSdkVersion = 16
+    }
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://repo.rdc.aliyun.com/repository/42850-release-OVOGxi"
+            credentials {
+                username "T73WKf"
+                password "yI25gfMOnr"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

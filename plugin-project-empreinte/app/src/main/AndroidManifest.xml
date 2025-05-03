@@ -1,0 +1,33 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="descartes.info.l3p2.eyetrek.reconnaissanceEmpreintes">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application>
+        <meta-data
+            android:name="shadow.plugin.id"
+            android:value="Empreintes-plugin" />
+
+        <activity
+            android:name=".activity.Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            android:launchMode="singleTask"
+            tools:ignore="Instantiatable">
+
+            <!-- Lancement via intent implicite avec scheme -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="reconnaissanceempreintes" />
+            </intent-filter>
+            <!-- Lancement via le launcher (icône sur l'écran d'accueil) -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

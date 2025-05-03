@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nom des modules -->
+    <!-- /!\ TOUTE MODIFICATION DANS CETTE LISTE DOIT ETRE REPERCUTEE DANS LES MANIFESTS DES MODULES
+            ET DANS L'ARRAY : module_names_array !!!!! RISQUE ELEVE DE BUG !!!-->
+    <string name="title_reconnaissanceArbres" translatable="false">reconnaissanceArbres</string>
+    <string name="title_reconnaissanceChampignons" translatable="false">reconnaissanceChampignons</string>
+    <string name="title_reconnaissanceChantsOiseaux" translatable="false">reconnaissanceChantsOiseaux</string>
+    <string name="title_reconnaissanceConstellations" translatable="false">reconnaissanceConstellations</string>
+    <string name="title_reconnaissanceEmpreintes" translatable="false">reconnaissanceEmpreintes</string>
+    <string name="title_reconnaissanceFeuilles" translatable="false">reconnaissanceFeuilles</string>
+
+
+
+    <!-- Liste contenant les noms des modules -->
+    <string-array name="module_names_array">
+        <item name="title_reconnaissanceArbres" translatable="false">reconnaissanceArbres</item>
+        <item name="title_reconnaissanceFeuilles" translatable="false">reconnaissanceFeuilles</item>
+        <item name="title_reconnaissanceEmpreintes" translatable="false">reconnaissanceEmpreintes</item>
+        <item name="title_reconnaissanceConstellations" translatable="false">reconnaissanceConstellations</item>
+        <item name="title_reconnaissanceChantsOiseaux" translatable="false">reconnaissanceChantsOiseaux</item>
+        <item name="title_reconnaissanceChampignons" translatable="false">reconnaissanceChampignons</item>
+    </string-array>
+
+    <!-- Nom des packs d'assets -->
+    <string name="title_asset_pack_feuilles" translatable="false">reconnaissanceFeuillesAssetPack</string>
+    <string name="title_asset_pack_champignons" translatable="false">reconnaissanceChampignonsAssetPack</string>
+    <string name="title_asset_pack_oiseaux" translatable="false">reconnaissanceChantsOiseauxAssetPack</string>
+</resources>

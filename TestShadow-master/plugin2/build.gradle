@@ -1,0 +1,87 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://repo.rdc.aliyun.com/repository/42850-release-OVOGxi"
+            credentials {
+                username "T73WKf"
+                password "yI25gfMOnr"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.tencent.shadow.core:runtime:2.0.12'
+        classpath 'com.tencent.shadow.core:gradle-plugin:2.0.12'
+        classpath 'org.javassist:javassist:3.22.0-GA'
+    }
+}
+apply plugin: 'com.android.application'
+
+
+android {
+    compileSdkVersion project.compileSdkVersion
+
+
+    defaultConfig {
+        applicationId "com.yoogor.testshadow"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.create("release")
+            signingConfig.initWith(buildTypes.debug.signingConfig)
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+apply plugin: 'com.tencent.shadow.plugin'
+
+shadow {
+    transform {
+//        useHostContext = ['abc']
+    }
+
+    packagePlugin {
+        pluginTypes {
+            release {
+                loaderApkConfig = new Tuple2('loader-release.apk', ':loader:assembleRelease')
+                runtimeApkConfig = new Tuple2('runtime-release.apk', ':runtime:assembleRelease')
+                pluginApks {
+                    pluginApk1 {
+                        businessName = 'plugin2'
+                        partKey = 'plugin2'
+                        buildTask = ':plugin2:assembleRelease'
+                        apkName = 'plugin2-release.apk'
+                        apkPath = 'plugin2/build/outputs/apk/release/plugin2-release.apk'
+                        hostWhiteList = ["com.yoogor.testshadow"]
+                    }
+                }
+            }
+        }
+        loaderApkProjectPath = 'loader'
+
+        runtimeApkProjectPath = 'runtime'
+
+        version = 4
+        compactVersion = [1, 2, 3]
+        uuidNickName = "1.1.5"
+    }
+}

@@ -1,0 +1,73 @@
+buildscript {
+    ext {
+        shadow_version = '2.2.1'
+        gradle_version = '7.4.2'
+        kotlin_version = '1.5.31'
+        build_gradle_version = '7.0.3'
+        
+        COMPILE_SDK_VERSION = 33
+        MIN_SDK_VERSION = 28
+        TARGET_SDK_VERSION = 33
+        VERSION_CODE = 1
+        VERSION_NAME = "1.0"
+        
+        kotlin_jvm_target = '1.8'
+        java_version = '1.8'
+    }
+    
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/tencent/shadow")
+            credentials {
+                username = "hibouwu"
+                password = "yourpwd"
+            }
+        }
+    }
+    
+    dependencies {
+        classpath "com.android.tools.build:gradle:${gradle_version}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/tencent/shadow")
+            credentials {
+                username = "hibouwu"
+                password = "yourpwd"
+            }
+        }
+    }
+    
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin('kotlin-android') || project.plugins.hasPlugin('kotlin')) {
+            project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = kotlin_jvm_target
+                }
+            }
+        }
+        
+        if (project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('com.android.application')) {
+            project.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
